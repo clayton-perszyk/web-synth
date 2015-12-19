@@ -1,4 +1,69 @@
+var MasterVolume = React.createClass({
+  handleChange: function(e) {
+      this.props.updateVolumeLevel(e.target.value);
+  },
 
+  render: function() {
+    return <div id="masterVolume">
+      <label> Master Volume
+        <input onChange={this.handleChange} id='master-gain' type='range' min='0' max='1' step='0.1' value='1' />
+      </label>
+    </div>
+  }
+});
+
+var EnvelopeModes = React.createClass({
+
+  handleChange: function(e) {
+    this.props.updateEnvelopeMode(e.target.value);
+  },
+
+  render: function() {
+    return <div>
+    <h1>Modes: </h1>
+    <form id="egModeCtrl" onChange={this.handleChange}>
+     <label> High
+         <input id='eg-high' type='radio' name='egMode' value='10' />
+     </label>
+     <label> Medium
+         <input id='eg-medium' type='radio' name='egMode' value='5' />
+     </label>
+     <label> Low
+         <input id='eg-low' type='radio' name='egMode' value='1' defaultChecked />
+     </label>
+    </form>
+  </div>;
+  }
+});
+
+var EnvelopeGenerator = React.createClass({
+
+  handleChange: function(e) {
+    this.props.updateEnvelopeValues(e.target.name, e.target.value);
+  },
+
+  render: function() {
+    return <div>
+      <MasterVolume />
+      <h1>Envelope</h1>
+      <form id='envelope' onChange={this.handleChange}>
+       <label> Attack
+           <input id='attack' type='range' min='0' max='1' step='0.05' value={this.props.attack} name='attack' />
+       </label>
+       <label> Decay
+           <input id='decay' type='range' min='0' max='1' step='0.05' value={this.props.decay} name='decay' />
+       </label>
+       <label> Sustain
+           <input id='sustain' type='range' min='0' max='1' step='0.05' value={this.props.sustain} name='sustain' />
+       </label>
+       <label> Release
+         <input id='release' type='range' min='0' max='1' step='0.05' value={this.props.release} name='release' />
+       </label>
+      </form>
+      <EnvelopeModes updateEnvelopeMode={this.props.updateEnvelopeMode}/>
+    </div>
+  }
+});
 
 var Keyboard = React.createClass({
   render: function() {
@@ -44,8 +109,8 @@ var Keyboard = React.createClass({
 
     var keyElms = keys.map(function(key, index){
       var className = key.className;
-
-      if (this.props.note === key.note) {
+      console.log("this.props.notes", this.props.notes);
+      if (this.props.notes.indexOf(key.note) !== -1) {
         className = "on " + className;
       }
 
@@ -62,7 +127,13 @@ var Keyboard = React.createClass({
 var Synth = React.createClass({
   getInitialState: function() {
     return {
-      note: null
+      notes: [],
+      attack: 0,
+      decay: 0,
+      sustain: 1,
+      release: 0,
+      egMode: 1,
+      volume: 0.5
     }
   },
 
@@ -70,10 +141,12 @@ var Synth = React.createClass({
     console.log("mounted");
     this.canvas = document.getElementById('canvas');
     this.canvasContext = canvas.getContext('2d');
-    var context = new AudioContext();
-    var gain = context.createGain();
-    this.analyser = context.createAnalyser();
+    this.context = new AudioContext();
+    this.vca = this.context.createGain();
+    this.master = this.context.createGain();
+    this.analyser = this.context.createAnalyser();
     this.keys = {};
+    this.activeKeys = {};
 
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess({
@@ -84,20 +157,24 @@ var Synth = React.createClass({
     }
 
     for (var i = 48; i <= 84; i++) {
-      var osc = context.createOscillator();
+      var osc = this.context.createOscillator();
       this.keys[i] = osc;
     }
 
     for (var key in this.keys) {
-        this.keys[key].connect(gain);
+        this.keys[key].connect(this.vca);
         this.keys[key].gain = 0;
         this.keys[key].type = "triangle";
         this.keys[key].frequency.value = 0;
         this.keys[key].start();
     }
 
-    gain.connect(this.analyser);
-    this.analyser.connect(context.destination);
+    this.vca.connect(this.master);
+    this.master.connect(this.analyser);
+    this.analyser.connect(this.context.destination);
+
+    this.vca.gain.value = 0;
+    this.master.gain.value = this.state.volume;
 
     window.requestAnimationFrame(this.drawFreqData);
   },
@@ -135,39 +212,101 @@ var Synth = React.createClass({
     console.log("processMessage");
     switch (onOrOff) {
       case 144:
+        var nextState = this.state.notes.concat([note]);
         this.onNote(note, velocity);
-        this.setState({note: note});
+        this.setState({notes: nextState});
         break;
       case 128:
         this.offNote(note, velocity);
-        this.setState({note: null});
+        this.setState({notes: []});
         break;
     }
+  },
+
+  envOn: function(vcaGain, attackVal, decayVal, sustainVal) {
+    var currTime = this.context.currentTime;
+
+    attackVal *= this.state.egMode;
+    decayVal *= this.state.egMode;
+
+    console.log(decayVal, attackVal, sustainVal, vcaGain);
+
+    vcaGain.cancelScheduledValues(0);
+    vcaGain.setValueAtTime(0, currTime);
+    vcaGain.linearRampToValueAtTime(1, currTime + attackVal);
+    vcaGain.linearRampToValueAtTime(sustainVal, (currTime + attackVal + decayVal));
+  },
+
+  envOff: function(vcaGain, releaseVal, osc, note) {
+    var currTime = this.context.currentTime;
+    console.log(releaseVal);
+
+    releaseVal *= this.state.egMode;
+
+    console.log("release time", releaseVal, "currTime", currTime);
+
+    vcaGain.cancelScheduledValues(0);
+    osc.frequency.cancelScheduledValues(0);
+    osc.frequency.setValueAtTime(this.noteToFreq(note), currTime);
+    vcaGain.setValueAtTime(vcaGain.value, currTime);
+    vcaGain.linearRampToValueAtTime(0, currTime + releaseVal);
+    osc.frequency.setValueAtTime(0, currTime + releaseVal);
   },
 
   onNote: function(note, velocity) {
     console.log("onNote");
     var osc = this.keys[note];
-    var freq = this.noteToFreq(note);
-    osc.frequency.value = freq;
+    var currTime = this.context.currentTime;
 
-    for (var i = 0; i <= velocity; i++) {
-      osc.gain += 1;
+    this.activeKeys[note] = true;
+
+    osc.frequency.cancelScheduledValues(0);
+    osc.frequency.setValueAtTime(this.noteToFreq(note), currTime);
+
+    if (Object.keys(this.activeKeys).length === 1) {
+      this.vca.gain.value = velocity / 127;
     }
 
-    velocity = osc.gain;
+    this.envOn(this.vca.gain, this.state.attack, this.state.decay, this.state.sustain);
   },
 
   offNote: function(note, velocity) {
     console.log("offNote");
     var osc = this.keys[note];
-    osc.frequency.value = 0;
+    var currTime = this.context.currentTime;
 
-    for (var i = velocity; i >= 0; i--) {
-      osc.gain -= 1;
+    delete this.activeKeys[note];
+
+    osc.frequency.cancelScheduledValues(0);
+    osc.frequency.setValueAtTime(this.noteToFreq(note), currTime);
+    osc.frequency.setValueAtTime(0, currTime + 0.1);
+
+
+    if (Object.keys(this.activeKeys).length === 0) {
+      this.envOff(this.vca.gain, this.state.release, osc, note);
     }
+  },
 
-    velocity = 0;
+  updateEnvelopeValues: function(name, value) {
+    if (name === 'attack') {
+      this.setState({attack: value});
+    } else if (name === 'decay') {
+      this.setState({decay: value});
+    } else if (name === 'sustain') {
+      this.setState({sustain: value});
+    } else if (name === 'release') {
+      this.setState({release: value});
+    }
+  },
+
+  updateEnvelopeMode: function(mode) {
+    this.setState({egMode: mode});
+    console.log(mode);
+  },
+
+  updateVolumeLevel: function(volume) {
+    this.master.gain.value = volume;
+    this.setState({volume: volume});
   },
 
   drawFreqData: function() {
@@ -196,7 +335,11 @@ var Synth = React.createClass({
 
   render: function() {
     return <div>
-      <Keyboard note={this.state.note} />
+      <EnvelopeGenerator
+        updateEnvelopeValues={this.updateEnvelopeValues}
+        updateEnvelopeMode={this.updateEnvelopeMode}
+      />
+      <Keyboard notes={this.state.notes} />
     </div>;
   }
 });
