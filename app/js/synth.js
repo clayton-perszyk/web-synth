@@ -1,3 +1,41 @@
+var FreqBarVisualisation = React.createClass({
+
+  componentDidMount: function() {
+    this.canvas = document.getElementById('canvas');
+    this.canvasContext = canvas.getContext('2d');
+    window.requestAnimationFrame(this.drawFreqData);
+  },
+
+  drawFreqData: function() {
+    var freqBinCountArray;
+    var numOfBars;
+    var offsetX;
+    var barWidth;
+    var barHeight;
+    var randColorNum;
+
+    freqBinCountArray = new Uint8Array(this.props.analyser.frequencyBinCount);
+    this.props.analyser.getByteFrequencyData(freqBinCountArray);
+    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    numOfBars = 1000;
+    for (var i = 0; i < numOfBars; i++) {
+      this.canvasContext.fillStyle = 'lightblue';
+      offsetX = i;
+      barWidth = -2;
+      barHeight = -((freqBinCountArray[i]));
+      this.canvasContext.fillRect(offsetX, this.canvas.height, barWidth, barHeight);
+    }
+
+    window.requestAnimationFrame(this.drawFreqData);
+  },
+
+  render: function() {
+    return <div>
+      <canvas id="canvas" width="400" height="200"></canvas>
+    </div>;
+  }
+});
+
 var WaveFormCtrl = React.createClass({
 
   handleChange: function(e) {
@@ -21,7 +59,7 @@ var WaveFormCtrl = React.createClass({
             <input id='triangle' type='radio' name='wave-form' value='triangle' />
         </label>
       </form>
-    </div>
+    </div>;
   }
 });
 
@@ -64,7 +102,7 @@ var Filters = React.createClass({
             <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterTwoCutOffFreq} name='filter-freq-two' />
           </label>
         </form>
-     </div>
+     </div>;
   }
 });
 
@@ -78,7 +116,7 @@ var MasterVolume = React.createClass({
       <label> Master Volume
         <input onChange={this.handleChange} id='master-gain' type='range' min='0' max='1' step='0.1' value='1' />
       </label>
-    </div>
+    </div>;
   }
 });
 
@@ -113,7 +151,7 @@ var EnvelopeGenerator = React.createClass({
   },
 
   render: function() {
-    return <div id="envelopes">
+    return <div id="envelope">
       <MasterVolume />
       <h1>Envelope</h1>
       <form id='envelope' onChange={this.handleChange}>
@@ -131,7 +169,7 @@ var EnvelopeGenerator = React.createClass({
        </label>
       </form>
       <EnvelopeModes updateEnvelopeMode={this.props.updateEnvelopeMode}/>
-    </div>
+    </div>;
   }
 });
 
@@ -188,7 +226,7 @@ var Keyboard = React.createClass({
 
     return <div id="keys">
       {keyElms}
-    </div>
+    </div>;
   }
 });
 
@@ -211,9 +249,7 @@ var Synth = React.createClass({
     }
   },
 
-  componentDidMount: function() {
-    this.canvas = document.getElementById('canvas');
-    this.canvasContext = canvas.getContext('2d');
+  componentWillMount: function() {
     this.context = new AudioContext();
     this.vca = this.context.createGain();
     this.master = this.context.createGain();
@@ -222,6 +258,9 @@ var Synth = React.createClass({
     this.analyser = this.context.createAnalyser();
     this.keys = {};
     this.activeKeys = {};
+  },
+
+  componentDidMount: function() {
 
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess({
@@ -254,10 +293,10 @@ var Synth = React.createClass({
     this.filterOne.type = this.state.filterOneType;
     this.filterTwo.frequency.value = this.state.filterTwoCutOffFreq;
     this.filterTwo.type = this.state.filterTwoType;
-    this.vca.gain.value = 0;
     this.master.gain.value = this.state.volume;
-
-    window.requestAnimationFrame(this.drawFreqData);
+    this.vca.gain.value = 0;
+    this.analyser.maxDecibels = 2;
+    this.analyser.minDecibels = -80;
   },
 
   onMIDISuccess: function(midi) {
@@ -288,7 +327,6 @@ var Synth = React.createClass({
   },
 
   processMessage: function(onOrOff, note, velocity) {
-    console.log("processMessage");
     switch (onOrOff) {
       case 144:
         var nextState = this.state.notes.concat([note]);
@@ -308,8 +346,6 @@ var Synth = React.createClass({
     attackVal *= this.state.egMode;
     decayVal *= this.state.egMode;
 
-    console.log(decayVal, attackVal, sustainVal, vcaGain);
-
     vcaGain.cancelScheduledValues(0);
     vcaGain.setValueAtTime(0, currTime);
     vcaGain.linearRampToValueAtTime(1, currTime + attackVal);
@@ -318,7 +354,6 @@ var Synth = React.createClass({
 
   envOff: function(vcaGain, releaseVal, osc, note) {
     var currTime = this.context.currentTime;
-    console.log(releaseVal);
 
     releaseVal *= this.state.egMode;
 
@@ -409,35 +444,14 @@ var Synth = React.createClass({
     }
   },
 
-  drawFreqData: function() {
-    var freqBinCountArray;
-    var numOfBars;
-    var offsetX;
-    var barWidth;
-    var barHeight;
-    var randColorNum;
-
-    freqBinCountArray = new Uint8Array(this.analyser.frequencyBinCount);
-    this.analyser.getByteFrequencyData(freqBinCountArray);
-    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    numOfBars = 1000;
-    for (var i = 0; i < numOfBars; i++) {
-      this.canvasContext.fillStyle = 'lightblue';
-      offsetX = i;
-      barWidth = -2;
-      barHeight = -((freqBinCountArray[i]));
-      this.canvasContext.fillRect(offsetX, this.canvas.height, barWidth, barHeight);
-    }
-
-    window.requestAnimationFrame(this.drawFreqData);
-  },
-
-
   render: function() {
     return <div>
       <EnvelopeGenerator
         updateEnvelopeValues={this.updateEnvelopeValues}
         updateEnvelopeMode={this.updateEnvelopeMode}
+      />
+      <FreqBarVisualisation
+        analyser={this.analyser}
       />
       <WaveFormCtrl
         updateWaveForm={this.updateWaveForm}
