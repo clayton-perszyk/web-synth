@@ -189,6 +189,8 @@ var Synth = React.createClass({
     this.context = new AudioContext();
     this.vca = this.context.createGain();
     this.master = this.context.createGain();
+    this.filterOne = this.context.createBiquadFilter();
+    this.filterTwo = this.context.createBiquadFilter();
     this.analyser = this.context.createAnalyser();
     this.keys = {};
     this.activeKeys = {};
@@ -214,10 +216,16 @@ var Synth = React.createClass({
         this.keys[key].start();
     }
 
-    this.vca.connect(this.master);
+    this.vca.connect(this.filterOne);
+    this.filterOne.connect(this.filterTwo);
+    this.filterTwo.connect(this.master);
     this.master.connect(this.analyser);
     this.analyser.connect(this.context.destination);
 
+    this.filterOne.frequency.value = this.state.filterOneCutOffFreq;
+    this.filterOne.type = this.state.filterOneType;
+    this.filterTwo.frequency.value = this.state.filterTwoCutOffFreq;
+    this.filterTwo.type = this.state.filterTwoType;
     this.vca.gain.value = 0;
     this.master.gain.value = this.state.volume;
 
@@ -350,12 +358,16 @@ var Synth = React.createClass({
   updateFilter: function(name, value) {
     console.log("name", name, "value", value);
     if (name === 'filter-one') {
+      this.filterOne.type = value;
       this.setState({filterOneType: value});
     } else if (name === 'filter-two') {
+      this.filterTwo.type = value;
       this.setState({filterTwoType: value});
     } else if (name === 'filter-freq-one') {
+      this.filterOne.frequency.value = value;
       this.setState({filterOneCutOffFreq: value});
     } else if (name === 'filter-freq-two') {
+      this.filterTwo.frequency.value = value;
       this.setState({filterTwoCutOffFreq: value});
     } else {
       console.log("Name or value not valid.");
@@ -395,7 +407,9 @@ var Synth = React.createClass({
       <Filters
         updateFilter={this.updateFilter}
       />
-      <Keyboard notes={this.state.notes} />
+      <Keyboard
+        notes={this.state.notes}
+      />
     </div>;
   }
 });
