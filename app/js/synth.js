@@ -1,3 +1,30 @@
+var WaveFormCtrl = React.createClass({
+
+  handleChange: function(e) {
+    this.props.updateWaveForm(e.target.value);
+  },
+
+  render: function() {
+    return <div id="wavform-ctrl">
+      <h1>Wave Form</h1>
+      <form id="wave-form" onChange={this.handleChange}>
+        <label> Sine
+            <input id='sine' type='radio' name='wave-form' value='sine' />
+        </label>
+        <label> Sawtooth
+            <input id='sawtooth' type='radio' name='wave-form' value='sawtooth' />
+        </label>
+        <label> Square
+            <input id='square' type='radio' name='wave-form' value='square' defaultChecked />
+        </label>
+        <label> Triangle
+            <input id='triangle' type='radio' name='wave-form' value='triangle' />
+        </label>
+      </form>
+    </div>
+  }
+});
+
 var Filters = React.createClass({
 
   handleChange: function(e) {
@@ -6,7 +33,7 @@ var Filters = React.createClass({
 
   render: function() {
       return <div id="filters">
-        <h1>Filter 1</h1>
+        <h2>Filter 1</h2>
         <form id="filter-one" onChange={this.handleChange}>
           <label> High-Pass
             <input className='high-pass' type='radio' name='filter-one' value='highpass' defaultChecked />
@@ -176,6 +203,7 @@ var Synth = React.createClass({
       release: 0,
       egMode: 1,
       volume: 0.5,
+      waveForm: 'square',
       filterOneType: 'highpass',
       filterTwoType: 'highpass',
       filterOneCutOffFreq: 0,
@@ -211,7 +239,7 @@ var Synth = React.createClass({
     for (var key in this.keys) {
         this.keys[key].connect(this.vca);
         this.keys[key].gain = 0;
-        this.keys[key].type = "triangle";
+        this.keys[key].type = this.state.waveForm;
         this.keys[key].frequency.value = 0;
         this.keys[key].start();
     }
@@ -374,6 +402,13 @@ var Synth = React.createClass({
     }
   },
 
+  updateWaveForm: function(newValue) {
+    this.setState({waveForm: newValue});
+    for (var key in this.keys) {
+      this.keys[key].type = newValue;
+    }
+  },
+
   drawFreqData: function() {
     var freqBinCountArray;
     var numOfBars;
@@ -403,6 +438,9 @@ var Synth = React.createClass({
       <EnvelopeGenerator
         updateEnvelopeValues={this.updateEnvelopeValues}
         updateEnvelopeMode={this.updateEnvelopeMode}
+      />
+      <WaveFormCtrl
+        updateWaveForm={this.updateWaveForm}
       />
       <Filters
         updateFilter={this.updateFilter}
