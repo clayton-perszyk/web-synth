@@ -1,3 +1,46 @@
+var Filters = React.createClass({
+
+  handleChange: function(e) {
+    this.props.updateFilter(e.target.name, e.target.value);
+  },
+
+  render: function() {
+      return <div id="filters">
+        <h1>Filter 1</h1>
+        <form id="filter-one" onChange={this.handleChange}>
+          <label> High-Pass
+            <input className='high-pass' type='radio' name='filter-one' value='highpass' defaultChecked />
+          </label>
+          <label> Low-Pass
+            <input className='low-pass' type='radio' name='filter-one' value='lowpass' />
+          </label>
+          <label> Band Pass
+            <input className='band-pass' type='radio' name='filter-one' value='bandpass' />
+          </label>
+          <label> Cutoff frequency
+            <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterOneCutOffFreq} name='filter-freq-one' />
+          </label>
+        </form>
+
+        <h2>Filter 2</h2>
+        <form id="filter-two" onChange={this.handleChange}>
+          <label> High-Pass
+            <input className='high-pass' type='radio' name='filter-two' value='highpass' defaultChecked />
+          </label>
+          <label> Low-Pass
+            <input className='low-pass' type='radio' name='filter-two' value='lowpass' />
+          </label>
+          <label> Band Pass
+            <input className='band-pass' type='radio' name='filter-two' value='bandpass' />
+          </label>
+          <label> Cutoff frequency
+            <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterTwoCutOffFreq} name='filter-freq-two' />
+          </label>
+        </form>
+     </div>
+  }
+});
+
 var MasterVolume = React.createClass({
   handleChange: function(e) {
       this.props.updateVolumeLevel(e.target.value);
@@ -43,7 +86,7 @@ var EnvelopeGenerator = React.createClass({
   },
 
   render: function() {
-    return <div>
+    return <div id="envelopes">
       <MasterVolume />
       <h1>Envelope</h1>
       <form id='envelope' onChange={this.handleChange}>
@@ -109,7 +152,6 @@ var Keyboard = React.createClass({
 
     var keyElms = keys.map(function(key, index){
       var className = key.className;
-      console.log("this.props.notes", this.props.notes);
       if (this.props.notes.indexOf(key.note) !== -1) {
         className = "on " + className;
       }
@@ -133,12 +175,15 @@ var Synth = React.createClass({
       sustain: 1,
       release: 0,
       egMode: 1,
-      volume: 0.5
+      volume: 0.5,
+      filterOneType: 'highpass',
+      filterTwoType: 'highpass',
+      filterOneCutOffFreq: 0,
+      filterTwoCutOffFreq: 0
     }
   },
 
   componentDidMount: function() {
-    console.log("mounted");
     this.canvas = document.getElementById('canvas');
     this.canvasContext = canvas.getContext('2d');
     this.context = new AudioContext();
@@ -180,7 +225,6 @@ var Synth = React.createClass({
   },
 
   onMIDISuccess: function(midi) {
-    console.log("success");
     var inputs = midi.inputs.values();
 
     for (var input of inputs) {
@@ -193,7 +237,6 @@ var Synth = React.createClass({
   },
 
   onMidiMessage: function(midiEvent) {
-    console.log("midiMesssage");
     var data = midiEvent.data;
     var command = data[0] >> 4;
     var channel = data[0] & 0xf;
@@ -243,8 +286,6 @@ var Synth = React.createClass({
 
     releaseVal *= this.state.egMode;
 
-    console.log("release time", releaseVal, "currTime", currTime);
-
     vcaGain.cancelScheduledValues(0);
     osc.frequency.cancelScheduledValues(0);
     osc.frequency.setValueAtTime(this.noteToFreq(note), currTime);
@@ -254,7 +295,6 @@ var Synth = React.createClass({
   },
 
   onNote: function(note, velocity) {
-    console.log("onNote");
     var osc = this.keys[note];
     var currTime = this.context.currentTime;
 
@@ -271,7 +311,6 @@ var Synth = React.createClass({
   },
 
   offNote: function(note, velocity) {
-    console.log("offNote");
     var osc = this.keys[note];
     var currTime = this.context.currentTime;
 
@@ -301,12 +340,26 @@ var Synth = React.createClass({
 
   updateEnvelopeMode: function(mode) {
     this.setState({egMode: mode});
-    console.log(mode);
   },
 
   updateVolumeLevel: function(volume) {
     this.master.gain.value = volume;
     this.setState({volume: volume});
+  },
+
+  updateFilter: function(name, value) {
+    console.log("name", name, "value", value);
+    if (name === 'filter-one') {
+      this.setState({filterOneType: value});
+    } else if (name === 'filter-two') {
+      this.setState({filterTwoType: value});
+    } else if (name === 'filter-freq-one') {
+      this.setState({filterOneCutOffFreq: value});
+    } else if (name === 'filter-freq-two') {
+      this.setState({filterTwoCutOffFreq: value});
+    } else {
+      console.log("Name or value not valid.");
+    }
   },
 
   drawFreqData: function() {
@@ -338,6 +391,9 @@ var Synth = React.createClass({
       <EnvelopeGenerator
         updateEnvelopeValues={this.updateEnvelopeValues}
         updateEnvelopeMode={this.updateEnvelopeMode}
+      />
+      <Filters
+        updateFilter={this.updateFilter}
       />
       <Keyboard notes={this.state.notes} />
     </div>;
