@@ -1,8 +1,62 @@
+var OsilliscopeVisualiztion = React.createClass({
+
+    componentDidMount: function() {
+      this.canvas = document.getElementById('canvas');
+      this.canvasContext = this.canvas.getContext('2d');
+      window.requestAnimationFrame(this.drawOscilliscope);
+    },
+
+    drawOscilliscope: function() {
+      var data;
+      var width;
+      var length;
+      var width;
+      var x;
+
+
+      length = this.props.analyser.frequencyBinCount;
+      data = new Uint8Array(length);
+      this.props.analyser.getByteTimeDomainData(data);
+      this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvasContext.fillStyle = 'black'
+      this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvasContext.lineWidth = 2;
+      this.canvasContext.strokeStyle = 'green'
+      this.canvasContext.beginPath();
+      width = canvas.width * 1.0 / length;
+      x = 0;
+
+      for (var i = 0; i < length; i++) {
+        var v = data[i] /128;
+        var y = v * this.canvas.height / 2;
+
+        if (i === 0) {
+          this.canvasContext.moveTo(x, y);
+        } else {
+          this.canvasContext.lineTo(x, y);
+        }
+
+        x += width;
+      }
+
+      this.canvasContext.lineTo(this.canvas.width, this.canvas.height / 2);
+      this.canvasContext.stroke();
+
+      window.requestAnimationFrame(this.drawOscilliscope);
+    },
+
+    render: function() {
+      return <div>
+        <canvas id="canvas" width="400" height="200"></canvas>
+      </div>;
+    }
+});
+
 var FreqBarVisualisation = React.createClass({
 
   componentDidMount: function() {
     this.canvas = document.getElementById('canvas');
-    this.canvasContext = canvas.getContext('2d');
+    this.canvasContext = this.canvas.getContext('2d');
     window.requestAnimationFrame(this.drawFreqData);
   },
 
@@ -297,6 +351,7 @@ var Synth = React.createClass({
     this.vca.gain.value = 0;
     this.analyser.maxDecibels = 2;
     this.analyser.minDecibels = -80;
+    this.analyser.smoothingTimeConstant = 0.85;
   },
 
   onMIDISuccess: function(midi) {
@@ -451,6 +506,9 @@ var Synth = React.createClass({
         updateEnvelopeMode={this.updateEnvelopeMode}
       />
       <FreqBarVisualisation
+        analyser={this.analyser}
+      />
+      <OsilliscopeVisualiztion
         analyser={this.analyser}
       />
       <WaveFormCtrl
