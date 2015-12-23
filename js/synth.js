@@ -1,3 +1,24 @@
+var VisualisationCtrl = React.createClass({
+
+  handleChange: function(e) {
+    this.props.toggleViz(e.target.value);
+  },
+
+  render: function() {
+    return <div id="visualisation-ctrl">
+      <h3>Visualisation Selection</h3>
+      <form id="vis-control" onChange={this.handleChange}>
+        <label> Frequency Bars
+            <input id='freq-bars' type='radio' name='viz' value='frequency' defaultChecked />
+        </label>
+        <label> Oscilliscope
+            <input id='oscilliscope' type='radio' name='viz' value='oscilliscope' />
+        </label>
+      </form>
+    </div>
+  }
+});
+
 var OsilliscopeVisualiztion = React.createClass({
 
     componentDidMount: function() {
@@ -21,7 +42,7 @@ var OsilliscopeVisualiztion = React.createClass({
       this.canvasContext.fillStyle = 'black'
       this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.canvasContext.lineWidth = 2;
-      this.canvasContext.strokeStyle = 'green'
+      this.canvasContext.strokeStyle = '#00f891';
       this.canvasContext.beginPath();
       width = canvas.width * 1.0 / length;
       x = 0;
@@ -46,8 +67,9 @@ var OsilliscopeVisualiztion = React.createClass({
     },
 
     render: function() {
-      return <div>
+      return <div className="col-md-5">
         <canvas id="canvas" width="400" height="200"></canvas>
+        <VisualisationCtrl toggleViz={this.props.toggleViz} />
       </div>;
     }
 });
@@ -73,7 +95,7 @@ var FreqBarVisualisation = React.createClass({
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
     numOfBars = 1000;
     for (var i = 0; i < numOfBars; i++) {
-      this.canvasContext.fillStyle = 'lightblue';
+      this.canvasContext.fillStyle = '#00e3f8';
       offsetX = i;
       barWidth = -2;
       barHeight = -((freqBinCountArray[i]));
@@ -84,8 +106,9 @@ var FreqBarVisualisation = React.createClass({
   },
 
   render: function() {
-    return <div>
+    return <div className="col-md-5">
       <canvas id="canvas" width="400" height="200"></canvas>
+      <VisualisationCtrl toggleViz={this.props.toggleViz} />
     </div>;
   }
 });
@@ -97,9 +120,9 @@ var WaveFormCtrl = React.createClass({
   },
 
   render: function() {
-    return <div id="wavform-ctrl">
-      <h1>Wave Form</h1>
+    return <div id="wavform-ctrl" className="col-md-4">
       <form id="wave-form" onChange={this.handleChange}>
+      <h3 className="center-wave">Wave Form</h3>
         <label> Sine
             <input id='sine' type='radio' name='wave-form' value='sine' />
         </label>
@@ -124,37 +147,53 @@ var Filters = React.createClass({
   },
 
   render: function() {
-      return <div id="filters">
-        <h2>Filter 1</h2>
-        <form id="filter-one" onChange={this.handleChange}>
+      return <div id="filters" className="col-md-4">
+          <form id="filter-one" onChange={this.handleChange}>
+          <h3>Filter 1</h3>
+          <div className="filter-ctrl">
           <label> High-Pass
-            <input className='high-pass' type='radio' name='filter-one' value='highpass' defaultChecked />
+           <input  className='high-pass filter-input' type='radio' name='filter-one' value='highpass' defaultChecked />
           </label>
+         </div>
+         <div className="filter-ctrl">
           <label> Low-Pass
-            <input className='low-pass' type='radio' name='filter-one' value='lowpass' />
+            <input className='low-pass filter-input' type='radio' name='filter-one' value='lowpass' />
           </label>
+         </div>
+         <div className="filter-ctrl">
           <label> Band Pass
-            <input className='band-pass' type='radio' name='filter-one' value='bandpass' />
+            <input className='band-pass filter-input' type='radio' name='filter-one' value='bandpass' />
           </label>
-          <label> Cutoff frequency
-            <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterOneCutOffFreq} name='filter-freq-one' />
-          </label>
+          </div>
+          <div className='cutoff-freq'>
+            <label> Cutoff frequency
+              <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterOneCutOffFreq} name='filter-freq-one' />
+            </label>
+          </div>
         </form>
 
-        <h2>Filter 2</h2>
         <form id="filter-two" onChange={this.handleChange}>
-          <label> High-Pass
+          <h3>Filter 2</h3>
+          <div className="filter-ctrl">
+           <label> High-Pass
             <input className='high-pass' type='radio' name='filter-two' value='highpass' defaultChecked />
-          </label>
-          <label> Low-Pass
-            <input className='low-pass' type='radio' name='filter-two' value='lowpass' />
-          </label>
-          <label> Band Pass
-            <input className='band-pass' type='radio' name='filter-two' value='bandpass' />
-          </label>
-          <label> Cutoff frequency
-            <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterTwoCutOffFreq} name='filter-freq-two' />
-          </label>
+           </label>
+          </div>
+          <div className="filter-ctrl">
+           <label> Low-Pass
+             <input className='low-pass' type='radio' name='filter-two' value='lowpass' />
+           </label>
+          </div>
+          <div className="filter-ctrl">
+           <label> Band Pass
+             <input className='band-pass' type='radio' name='filter-two' value='bandpass' />
+           </label>
+          </div>
+          <div id='cutoff-freq'>
+            <label> Cutoff frequency
+              <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterTwoCutOffFreq} name='filter-freq-two' />
+            </label>
+          </div>
         </form>
      </div>;
   }
@@ -166,7 +205,7 @@ var MasterVolume = React.createClass({
   },
 
   render: function() {
-    return <div id="masterVolume">
+    return <div id="master-volume" className="col-md-3">
       <label> Master Volume
         <input onChange={this.handleChange} id='master-gain' type='range' min='0' max='1' step='0.1' value='1' />
       </label>
@@ -181,8 +220,8 @@ var EnvelopeModes = React.createClass({
   },
 
   render: function() {
-    return <div>
-    <h1>Modes: </h1>
+    return <div id="envelope-modes">
+    <h4 className="center">Envelope Mode</h4>
     <form id="egModeCtrl" onChange={this.handleChange}>
      <label> High
          <input id='eg-high' type='radio' name='egMode' value='10' />
@@ -205,22 +244,29 @@ var EnvelopeGenerator = React.createClass({
   },
 
   render: function() {
-    return <div id="envelope">
-      <MasterVolume />
-      <h1>Envelope</h1>
-      <form id='envelope' onChange={this.handleChange}>
-       <label> Attack
-           <input id='attack' type='range' min='0' max='1' step='0.05' value={this.props.attack} name='attack' />
-       </label>
-       <label> Decay
-           <input id='decay' type='range' min='0' max='1' step='0.05' value={this.props.decay} name='decay' />
-       </label>
-       <label> Sustain
-           <input id='sustain' type='range' min='0' max='1' step='0.05' value={this.props.sustain} name='sustain' />
-       </label>
-       <label> Release
-         <input id='release' type='range' min='0' max='1' step='0.05' value={this.props.release} name='release' />
-       </label>
+    return <div id="envelope" className="col-md-3">
+      <h3 className="center">Envelope</h3>
+      <form onChange={this.handleChange}>
+      <div className="env-ctrl-right">
+        <label> Attack
+          <input id='attack' type='range' min='0' max='1' step='0.05' value={this.props.attack} name='attack' defaultValue />
+        </label>
+       </div>
+       <div className="env-ctrl-right">
+        <label> Decay
+          <input id='decay' type='range' min='0' max='1' step='0.05' value={this.props.decay} name='decay' defaultValue />
+        </label>
+       </div>
+       <div className="env-ctrl-left">
+        <label> Sustain
+          <input id='sustain' type='range' min='0' max='1' step='0.05' value={this.props.sustain} name='sustain' defaultValue />
+        </label>
+       </div>
+       <div className="env-ctrl-left">
+        <label> Release
+         <input id='release' type='range' min='0' max='1' step='0.05' value={this.props.release} name='release' defaultValue/>
+        </label>
+       </div>
       </form>
       <EnvelopeModes updateEnvelopeMode={this.props.updateEnvelopeMode}/>
     </div>;
@@ -278,7 +324,7 @@ var Keyboard = React.createClass({
       return <div className={className} key={index} />
     }, this);
 
-    return <div id="keys">
+    return <div id="keys" className="col-md-12">
       {keyElms}
     </div>;
   }
@@ -299,7 +345,8 @@ var Synth = React.createClass({
       filterOneType: 'highpass',
       filterTwoType: 'highpass',
       filterOneCutOffFreq: 0,
-      filterTwoCutOffFreq: 0
+      filterTwoCutOffFreq: 0,
+      visualisation: 'frequency'
     }
   },
 
@@ -499,30 +546,62 @@ var Synth = React.createClass({
     }
   },
 
+  toggleViz: function(newValue) {
+    this.setState({visualisation: newValue});
+  },
+
   render: function() {
+    var viz;
+
+    if (this.state.visualisation === 'frequency') {
+      viz = <FreqBarVisualisation
+        analyser={this.analyser}
+        toggleViz={this.toggleViz}
+      />
+    } else {
+      viz = <OsilliscopeVisualiztion
+        analyser={this.analyser}
+        toggleViz={this.toggleViz}
+      />
+    }
+
     return <div>
-      <EnvelopeGenerator
-        updateEnvelopeValues={this.updateEnvelopeValues}
-        updateEnvelopeMode={this.updateEnvelopeMode}
-      />
-      <FreqBarVisualisation
-        analyser={this.analyser}
-      />
-      <OsilliscopeVisualiztion
-        analyser={this.analyser}
-      />
-      <WaveFormCtrl
-        updateWaveForm={this.updateWaveForm}
-      />
-      <Filters
-        updateFilter={this.updateFilter}
-      />
-      <Keyboard
-        notes={this.state.notes}
-      />
+      <div id="controls">
+        <div className="row">
+          <h2 id="logo">LOGO</h2>
+        </div>
+        <div className="row">
+          <Filters
+            updateFilter={this.updateFilter}
+            filterOneCutOffFreq={this.state.filterOneCutOffFreq}
+            filterTwoCutOffFreq={this.state.filterTwoCutOffFreq}
+          />
+          {viz}
+          <MasterVolume />
+        </div>
+        <div className="row">
+          <WaveFormCtrl
+            updateWaveForm={this.updateWaveForm}
+          />
+          <EnvelopeGenerator
+              attack={this.state.attack}
+              decay={this.state.decay}
+              sustain={this.state.sustain}
+              release={this.state.release}
+              updateEnvelopeValues={this.updateEnvelopeValues}
+              updateEnvelopeMode={this.updateEnvelopeMode}
+           />
+        </div>
+      </div>
+      <div className="row">
+        <Keyboard
+          notes={this.state.notes}
+        />
+      </div>
     </div>;
   }
 });
+
 
 ReactDOM.render(
   <Synth />,
