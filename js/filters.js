@@ -1,11 +1,11 @@
-var Filters = React.createClass({
+window.Filters = React.createClass({
 
   handleChange: function(e) {
     this.props.updateFilter(e.target.name, e.target.value);
   },
 
   render: function() {
-      return <div id="filters" className="col-md-4">
+      return <div id="filters">
           <form id="filter-one" onChange={this.handleChange}>
           <h3>Filter 1</h3>
           <div className="filter-ctrl">

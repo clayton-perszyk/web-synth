@@ -1,4 +1,4 @@
-var FreqBarVisualisation = React.createClass({
+window.FreqBarVisualisation = React.createClass({
 
   componentDidMount: function() {
     this.canvas = document.getElementById('canvas');
@@ -30,9 +30,12 @@ var FreqBarVisualisation = React.createClass({
   },
 
   render: function() {
-    return <div className="col-md-5">
+    return <div>
       <canvas id="canvas" width="400" height="200"></canvas>
-      <VisualisationCtrl toggleViz={this.props.toggleViz} />
+      <VisualisationCtrl
+        toggleViz={this.props.toggleViz}
+        updateWaveForm={this.props.updateWaveForm}
+       />
     </div>;
   }
 });

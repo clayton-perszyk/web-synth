@@ -1,11 +1,11 @@
-var EnvelopeGenerator = React.createClass({
+window.EnvelopeGenerator = React.createClass({
 
   handleChange: function(e) {
     this.props.updateEnvelopeValues(e.target.name, e.target.value);
   },
 
   render: function() {
-    return <div id="envelope" className="col-md-3">
+    return <div id="envelope">
       <h3 className="center">Envelope</h3>
       <form onChange={this.handleChange}>
       <div className="env-ctrl-right">

@@ -1,11 +1,11 @@
-var WaveFormCtrl = React.createClass({
+window.WaveFormCtrl = React.createClass({
 
   handleChange: function(e) {
     this.props.updateWaveForm(e.target.value);
   },
 
   render: function() {
-    return <div id="wavform-ctrl" className="col-md-4">
+    return <div id="wavform-ctrl">
       <form id="wave-form" onChange={this.handleChange}>
       <h3 className="center-wave">Wave Form</h3>
         <label> Sine

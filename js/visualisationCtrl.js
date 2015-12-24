@@ -1,4 +1,4 @@
-var VisualisationCtrl = React.createClass({
+window.VisualisationCtrl = React.createClass({
 
   handleChange: function(e) {
     this.props.toggleViz(e.target.value);
@@ -15,6 +15,9 @@ var VisualisationCtrl = React.createClass({
             <input id='oscilliscope' type='radio' name='viz' value='oscilliscope' />
         </label>
       </form>
+      <WaveFormCtrl
+        updateWaveForm={this.props.updateWaveForm}
+      />
     </div>
   }
 });

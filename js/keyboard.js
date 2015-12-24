@@ -1,4 +1,4 @@
-var Keyboard = React.createClass({
+window.Keyboard = React.createClass({
   render: function() {
     var keys = [
       {note: 48, className: 'white'},
@@ -49,7 +49,7 @@ var Keyboard = React.createClass({
       return <div className={className} key={index} />
     }, this);
 
-    return <div id="keys" className="col-md-12">
+    return <div id="keys">
       {keyElms}
     </div>;
   }

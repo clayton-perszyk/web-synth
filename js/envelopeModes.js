@@ -1,4 +1,4 @@
-var EnvelopeModes = React.createClass({
+window.EnvelopeModes = React.createClass({
 
   handleChange: function(e) {
     this.props.updateEnvelopeMode(e.target.value);
