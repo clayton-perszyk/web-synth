@@ -235,10 +235,7 @@ var Synth = React.createClass({
     }
 
     return <div>
-      <div id="controls">
-        <div>
-          <h2 id="logo">LOGO</h2>
-        </div>
+        <h2 id="logo">LOGO</h2>
         {viz}
         <MasterVolume />
         <Filters
@@ -257,7 +254,6 @@ var Synth = React.createClass({
         <Keyboard
           notes={this.state.notes}
         />
-      </div>
     </div>;
   }
 });

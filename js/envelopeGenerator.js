@@ -6,7 +6,7 @@ window.EnvelopeGenerator = React.createClass({
 
   render: function() {
     return <div id="envelope">
-      <h3 className="center">Envelope</h3>
+      <h3>Envelope</h3>
       <form onChange={this.handleChange}>
       <div className="env-ctrl-right">
         <label> Attack
