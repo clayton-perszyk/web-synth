@@ -1,4 +1,12 @@
 window.Keyboard = React.createClass({
+  handleMouseDown: function(e) {
+    this.props.processMessage(144, e.target.id, 1);
+  },
+
+  handleMouseUp: function(e) {
+    this.props.processMessage(128, e.target.id, 1);
+  },
+
   render: function() {
     var keys = [
       {note: 48, className: 'white'},
@@ -42,14 +50,18 @@ window.Keyboard = React.createClass({
 
     var keyElms = keys.map(function(key, index){
       var className = key.className;
+      var note = keys[index].note;
+  
       if (this.props.notes.indexOf(key.note) !== -1) {
         className = "on " + className;
       }
 
-      return <div className={className} key={index} />
+      return <div id={note} className={className} key={index} />
     }, this);
 
-    return <div id="keys">
+    return <div id="keys"
+                onMouseDown={this.handleMouseDown}
+                onMouseUp={this.handleMouseUp}>
       {keyElms}
     </div>;
   }

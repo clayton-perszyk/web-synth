@@ -96,6 +96,7 @@ var Synth = React.createClass({
   },
 
   processMessage: function(onOrOff, note, velocity) {
+    var index;
     switch (onOrOff) {
       case 144:
         var nextState = this.state.notes.concat([note]);
@@ -103,8 +104,14 @@ var Synth = React.createClass({
         this.setState({notes: nextState});
         break;
       case 128:
+        index = this.state.notes.indexOf(note);
         this.offNote(note, velocity);
-        this.setState({notes: []});
+        if (this.state.notes.length > 1) {
+          this.state.notes.splice(index, 1)
+          this.setState({notes: this.state.notes});
+        } else {
+          this.setState({notes: []});
+        }
         break;
     }
   },
@@ -235,7 +242,7 @@ var Synth = React.createClass({
     }
 
     return <div id="synth">
-        <div id="logo"><img src="images/midi_synth_opti_blue.png"></img></div>
+        <div id="logo"><img src="images/midi_synth_opti_gray.png"></img></div>
         <div id="controls">
           <EnvelopeGenerator
               attack={this.state.attack}
@@ -260,6 +267,7 @@ var Synth = React.createClass({
         <div>
           <Keyboard
             notes={this.state.notes}
+            processMessage={this.processMessage}
           />
         </div>
     </div>;
