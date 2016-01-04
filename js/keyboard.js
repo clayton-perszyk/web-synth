@@ -51,7 +51,6 @@ window.Keyboard = React.createClass({
     var keyElms = keys.map(function(key, index){
       var className = key.className;
       var note = keys[index].note;
-  
       if (this.props.notes.indexOf(key.note) !== -1) {
         className = "on " + className;
       }
@@ -61,7 +60,8 @@ window.Keyboard = React.createClass({
 
     return <div id="keys"
                 onMouseDown={this.handleMouseDown}
-                onMouseUp={this.handleMouseUp}>
+                onMouseUp={this.handleMouseUp}
+                onMouseLeave={this.handleMouseUp} >
       {keyElms}
     </div>;
   }

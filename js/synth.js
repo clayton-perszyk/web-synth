@@ -97,9 +97,11 @@ var Synth = React.createClass({
 
   processMessage: function(onOrOff, note, velocity) {
     var index;
+    var nextState;
+    var note = Number(note);
     switch (onOrOff) {
       case 144:
-        var nextState = this.state.notes.concat([note]);
+        nextState = this.state.notes.concat([note]);
         this.onNote(note, velocity);
         this.setState({notes: nextState});
         break;
@@ -108,10 +110,11 @@ var Synth = React.createClass({
         this.offNote(note, velocity);
         if (this.state.notes.length > 1) {
           this.state.notes.splice(index, 1)
-          this.setState({notes: this.state.notes});
+          nextState = {notes: this.state.notes};
         } else {
-          this.setState({notes: []});
+          nextState = {notes: []};
         }
+        this.setState(nextState);
         break;
     }
   },
@@ -160,6 +163,11 @@ var Synth = React.createClass({
   offNote: function(note, velocity) {
     var osc = this.keys[note];
     var currTime = this.context.currentTime;
+        console.log(osc);
+
+    if (osc === undefined) {
+      return;
+    }
 
     delete this.activeKeys[note];
 
