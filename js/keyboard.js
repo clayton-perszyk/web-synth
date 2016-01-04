@@ -61,7 +61,7 @@ window.Keyboard = React.createClass({
     return <div id="keys"
                 onMouseDown={this.handleMouseDown}
                 onMouseUp={this.handleMouseUp}
-                onMouseLeave={this.handleMouseUp} >
+                onMouseOut={this.handleMouseUp}>
       {keyElms}
     </div>;
   }

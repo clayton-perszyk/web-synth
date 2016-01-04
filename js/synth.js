@@ -148,6 +148,10 @@ var Synth = React.createClass({
     var osc = this.keys[note];
     var currTime = this.context.currentTime;
 
+    if (osc === undefined) {
+      return;
+    }
+
     this.activeKeys[note] = true;
 
     osc.frequency.cancelScheduledValues(0);
@@ -163,7 +167,6 @@ var Synth = React.createClass({
   offNote: function(note, velocity) {
     var osc = this.keys[note];
     var currTime = this.context.currentTime;
-        console.log(osc);
 
     if (osc === undefined) {
       return;

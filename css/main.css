@@ -118,22 +118,21 @@ input[type="radio"]:not(old) {
 }
 
 .white.more {
-  padding-right: 3%;
+  padding-right: 4%;
 }
 
 .white.last {
-  width: 7%;
+  width: 8%;
 }
 
 .black {
   height: 120px;
-  width: 2.5%;
+  width: 3.5%;
   border: 1px solid black;
   background: black;
   position: relative;
   left: 0.4%;
   box-shadow: 2px 2px 5px #111;
-  border-radius: 0 0 50px 50px;
 }
 
 .on {
