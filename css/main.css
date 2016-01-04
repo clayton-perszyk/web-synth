@@ -2,55 +2,138 @@
   box-sizing: border-box;
 }
 
-#container {
+body {
+  background: url("https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRutqjysxc2XJfNN1HHvakyQfPDQeb9sl6JO3CBOTpbMUEwy7rf");
+  background-size: cover;;
+  background-repeat: no-repeat;
+}
+
+#synth {
   width: 1000px;
   margin: 0 auto;
+  background: rgba(100, 100, 100, 0.8);
+  padding-right: 25px;
+  padding-left: 10px;
+}
+
+#keys,
+#controls {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+}
+
+#envelope {
+  border: 1px solid white;
+  padding: 10px;
+  margin: 10px;
+  margin-left: 20px;
 }
 
 #logo {
   text-align: center;
+  padding-top: 20px;
 }
 
 #canvas {
   border: 2px solid #4F4F4F;
   background: black;
-  margin-left: 10px;
-  width:100%;
+  width: 100%;
   height: 250px;
 }
 
+#vis-control > label {
+  margin-left: 15px;
+}
+
+.viz,
+#filters,
+#master-volume,
+#wavform-ctrl  {
+  border: 1px solid white;
+  padding: 10px;
+  margin: 10px;
+}
+
+#filters {
+  padding-top: 0px;
+}
+
+h3,
+h4,
+label {
+  color: white;
+  text-align: center;
+  letter-spacing: 0.4px;
+  font-family: Helvetica, sans-serif;
+}
+
+.filter-ctrl {
+  line-height: 30px;
+}
+
+.cutoff-freq {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+#wavform-ctrl {
+  text-align: center;
+  padding-bottom: 90px;
+}
+
+#wave-form > label,
+#egModeCtrl > label  {
+  display: block;
+  line-height: 30px;
+  text-align: left;
+  margin: 2px;
+}
+
 input[type="radio"]:not(old) {
-  margin-left: 10px;
-  margin-right: 12px;
+  margin-left: 5px;
+  margin-right: 6px;
+  float: right;
+}
+
+#freq-bars,
+#oscilliscope {
+  float: none;
 }
 
 #keys {
   width: 100%;
+  padding-top: 10px;
 }
 
 .white {
-  height: 20.5em;
-  width: 5%;
+  height: 250px;
+  width: 9%;
   border: 1px solid black;
   background: #ddd;
-  float: left;
   margin-right: -20px;
   box-shadow: -2px -2px 0px #fff;
 }
 
 .white.more {
-  padding-right: 6%;
+  padding-right: 3%;
+}
+
+.white.last {
+  width: 7%;
 }
 
 .black {
-  height: 8.7em;
-  width: 1%;
+  height: 120px;
+  width: 2.5%;
   border: 1px solid black;
-  float: left;
   background: black;
   position: relative;
   left: 0.4%;
   box-shadow: 2px 2px 5px #111;
+  border-radius: 0 0 50px 50px;
 }
 
 .on {

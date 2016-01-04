@@ -7,7 +7,7 @@ var Synth = React.createClass({
       sustain: 1,
       release: 0,
       egMode: 1,
-      volume: 0.5,
+      volume: 1,
       waveForm: 'square',
       filterOneType: 'highpass',
       filterTwoType: 'highpass',
@@ -64,7 +64,7 @@ var Synth = React.createClass({
     this.master.gain.value = this.state.volume;
     this.vca.gain.value = 0;
     this.analyser.maxDecibels = 2;
-    this.analyser.minDecibels = -80;
+    this.analyser.minDecibels = -100;
     this.analyser.smoothingTimeConstant = 0.85;
   },
 
@@ -234,26 +234,34 @@ var Synth = React.createClass({
       />
     }
 
-    return <div>
-        <h2 id="logo">LOGO</h2>
-        {viz}
-        <MasterVolume />
-        <Filters
-          updateFilter={this.updateFilter}
-          filterOneCutOffFreq={this.state.filterOneCutOffFreq}
-          filterTwoCutOffFreq={this.state.filterTwoCutOffFreq}
-        />
-        <EnvelopeGenerator
-            attack={this.state.attack}
-            decay={this.state.decay}
-            sustain={this.state.sustain}
-            release={this.state.release}
-            updateEnvelopeValues={this.updateEnvelopeValues}
-            updateEnvelopeMode={this.updateEnvelopeMode}
-         />
-        <Keyboard
-          notes={this.state.notes}
-        />
+    return <div id="synth">
+        <div id="logo"><img src="images/midi_synth_opti_blue.png"></img></div>
+        <div id="controls">
+          <EnvelopeGenerator
+              attack={this.state.attack}
+              decay={this.state.decay}
+              sustain={this.state.sustain}
+              release={this.state.release}
+              updateEnvelopeValues={this.updateEnvelopeValues}
+              updateEnvelopeMode={this.updateEnvelopeMode}
+           />
+          {viz}
+          <Filters
+            updateFilter={this.updateFilter}
+            filterOneCutOffFreq={this.state.filterOneCutOffFreq}
+            filterTwoCutOffFreq={this.state.filterTwoCutOffFreq}
+          />
+          <WaveFormCtrl
+            updateWaveForm={this.updateWaveForm}
+            updateVolumeLevel={this.updateVolumeLevel}
+            volume={this.state.volume}
+          />
+        </div>
+        <div>
+          <Keyboard
+            notes={this.state.notes}
+          />
+        </div>
     </div>;
   }
 });

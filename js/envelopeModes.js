@@ -9,7 +9,7 @@ window.EnvelopeModes = React.createClass({
     <h4 className="center">Envelope Mode</h4>
     <form id="egModeCtrl" onChange={this.handleChange}>
      <label> High
-         <input id='eg-high' type='radio' name='egMode' value='10' />
+         <input id='eg-high' type='radio' name='egMode' value='10'  />
      </label>
      <label> Medium
          <input id='eg-medium' type='radio' name='egMode' value='5' />

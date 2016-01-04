@@ -5,6 +5,7 @@ window.Filters = React.createClass({
   },
 
   render: function() {
+
       return <div id="filters">
           <form id="filter-one" onChange={this.handleChange}>
           <h3>Filter 1</h3>
@@ -24,7 +25,7 @@ window.Filters = React.createClass({
           </label>
           </div>
           <div className='cutoff-freq'>
-            <label> Cutoff frequency
+            <label> Cutoff frequency:
               <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterOneCutOffFreq} name='filter-freq-one' />
             </label>
           </div>
@@ -47,8 +48,8 @@ window.Filters = React.createClass({
              <input className='band-pass' type='radio' name='filter-two' value='bandpass' />
            </label>
           </div>
-          <div id='cutoff-freq'>
-            <label> Cutoff frequency
+          <div className='cutoff-freq'>
+            <label> Cutoff frequency:
               <input className='filter-freq' type='range' min='0' max='5000' step='100' value={this.props.filterTwoCutOffFreq} name='filter-freq-two' />
             </label>
           </div>

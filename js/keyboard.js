@@ -37,7 +37,7 @@ window.Keyboard = React.createClass({
       {note: 81, className: 'white'},
       {note: 82, className: 'black'},
       {note: 83, className: 'white more'},
-      {note: 84, className: 'white'},
+      {note: 84, className: 'white last'},
     ];
 
     var keyElms = keys.map(function(key, index){

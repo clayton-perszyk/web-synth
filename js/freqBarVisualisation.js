@@ -30,7 +30,7 @@ window.FreqBarVisualisation = React.createClass({
   },
 
   render: function() {
-    return <div>
+    return <div className="viz">
       <canvas id="canvas" width="400" height="200"></canvas>
       <VisualisationCtrl
         toggleViz={this.props.toggleViz}

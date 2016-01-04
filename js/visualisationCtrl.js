@@ -15,9 +15,6 @@ window.VisualisationCtrl = React.createClass({
             <input id='oscilliscope' type='radio' name='viz' value='oscilliscope' />
         </label>
       </form>
-      <WaveFormCtrl
-        updateWaveForm={this.props.updateWaveForm}
-      />
     </div>
   }
 });
