@@ -21,7 +21,7 @@ window.OsilliscopeVisualiztion = React.createClass({
       this.canvasContext.fillStyle = 'black'
       this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.canvasContext.lineWidth = 2;
-      this.canvasContext.strokeStyle = '#00f891';
+      this.canvasContext.strokeStyle = '#00FF66';
       this.canvasContext.beginPath();
       width = canvas.width * 1.0 / length;
       x = 0;

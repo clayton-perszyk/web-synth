@@ -20,7 +20,7 @@ window.FreqBarVisualisation = React.createClass({
     numOfBars = 1000;
     for (var i = 0; i < numOfBars; i++) {
       this.canvasContext.fillStyle = '#00e3f8';
-      offsetX = i;
+      offsetX = i * 5;
       barWidth = -1;
       barHeight = -((freqBinCountArray[i]));
       this.canvasContext.fillRect(offsetX, this.canvas.height, barWidth, barHeight);

@@ -4,7 +4,7 @@ var Synth = React.createClass({
       notes: [],
       attack: 0,
       decay: 0,
-      sustain: 1,
+      sustain: 0.1,
       release: 0,
       egMode: 1,
       volume: 1,
@@ -13,7 +13,7 @@ var Synth = React.createClass({
       filterTwoType: 'highpass',
       filterOneCutOffFreq: 0,
       filterTwoCutOffFreq: 0,
-      visualisation: 'frequency'
+      visualisation: 'oscilliscope'
     }
   },
 

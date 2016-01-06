@@ -9,10 +9,10 @@ window.VisualisationCtrl = React.createClass({
       <h3>Visualisation Selection</h3>
       <form id="vis-control" onChange={this.handleChange}>
         <label> Frequency Bars
-            <input id='freq-bars' type='radio' name='viz' value='frequency' defaultChecked />
+            <input id='freq-bars' type='radio' name='viz' value='frequency'  />
         </label>
         <label> Oscilliscope
-            <input id='oscilliscope' type='radio' name='viz' value='oscilliscope' />
+            <input id='oscilliscope' type='radio' name='viz' value='oscilliscope' defaultChecked />
         </label>
       </form>
     </div>
