@@ -20,7 +20,7 @@ window.Filters = React.createClass({
           </label>
          </div>
          <div className="filter-ctrl">
-          <label> Band Pass
+          <label> Band-Pass
             <input className='band-pass filter-input' type='radio' name='filter-one' value='bandpass' />
           </label>
           </div>
@@ -44,7 +44,7 @@ window.Filters = React.createClass({
            </label>
           </div>
           <div className="filter-ctrl">
-           <label> Band Pass
+           <label> Band-Pass
              <input className='band-pass' type='radio' name='filter-two' value='bandpass' />
            </label>
           </div>
