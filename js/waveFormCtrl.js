@@ -11,6 +11,10 @@ window.WaveFormCtrl = React.createClass({
             updateVolumeLevel={this.props.updateVolumeLevel}
             volume={this.props.volume}
           />
+          <Distortion
+            updateDistortionValue={this.props.updateDistortionValue}
+            distortionLevel={this.props.distortionLevel}
+          />
         <div id="wavform-ctrl">
         <form id="wave-form" onChange={this.handleChange}>
         <h3 className="center-wave">Wave Form</h3>

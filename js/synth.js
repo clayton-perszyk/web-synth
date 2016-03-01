@@ -1,3 +1,19 @@
+function makeDistortionCurve(distortionLevel) {
+   var k = typeof distortionLevel === 'number' ? distortionLevel : 50,
+   n_samples = 44100,
+   curve = new Float32Array(n_samples),
+   deg = Math.PI / 180,
+   i = 0,
+   x;
+
+   for ( ; i < n_samples; ++i ) {
+    x = i * 2 / n_samples - 1;
+    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+  }
+
+   return curve
+}
+
 var Synth = React.createClass({
   getInitialState: function() {
     return {
@@ -13,7 +29,7 @@ var Synth = React.createClass({
       filterTwoType: 'highpass',
       filterOneCutOffFreq: 0,
       filterTwoCutOffFreq: 0,
-      visualisation: 'oscilliscope'
+      visualisation: 'oscilliscope',
     }
   },
 
@@ -23,6 +39,7 @@ var Synth = React.createClass({
     this.master = this.context.createGain();
     this.filterOne = this.context.createBiquadFilter();
     this.filterTwo = this.context.createBiquadFilter();
+    this.distortion = this.context.createWaveShaper();
     this.analyser = this.context.createAnalyser();
     this.keys = {};
     this.activeKeys = {};
@@ -51,7 +68,8 @@ var Synth = React.createClass({
         this.keys[key].start();
     }
 
-    this.vca.connect(this.filterOne);
+    this.vca.connect(this.distortion);
+    this.distortion.connect(this.filterOne);
     this.filterOne.connect(this.filterTwo);
     this.filterTwo.connect(this.master);
     this.master.connect(this.analyser);
@@ -231,6 +249,14 @@ var Synth = React.createClass({
     }
   },
 
+  updateDistortionValue: function(distortion) {
+    if (distortion === 'on') {
+      this.distortion.curve = makeDistortionCurve(200);
+    } else {
+      this.distortion.curve = false;
+    }
+  },
+
   toggleViz: function(newValue) {
     this.setState({visualisation: newValue});
   },
@@ -252,6 +278,7 @@ var Synth = React.createClass({
       />
     }
 
+
     return <div id="synth">
         <div id="logo"><img src="images/midi_synth_opti_gray.png"></img></div>
         <div id="controls">
@@ -270,9 +297,11 @@ var Synth = React.createClass({
             filterTwoCutOffFreq={this.state.filterTwoCutOffFreq}
           />
           <WaveFormCtrl
+            updateDistortionValue={this.updateDistortionValue}
             updateWaveForm={this.updateWaveForm}
             updateVolumeLevel={this.updateVolumeLevel}
             volume={this.state.volume}
+            distortionLevel={this.state.distortionLevel}
           />
         </div>
         <div>
