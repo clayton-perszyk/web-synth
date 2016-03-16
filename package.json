@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/clayton-perszyk/web-synth#readme",
   "dependencies": {
-    "surge": "latest"
+    "surge": "latest",
+    "webpack": "^1.12.14"
   }
 }
