@@ -1,4 +1,7 @@
-window.EnvelopeModes = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+
+var EnvelopeModes = React.createClass({
 
   handleChange: function(e) {
     this.props.updateEnvelopeMode(e.target.value);
@@ -21,3 +24,5 @@ window.EnvelopeModes = React.createClass({
   </div>;
   }
 });
+
+export default EnvelopeModes;

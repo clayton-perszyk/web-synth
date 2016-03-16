@@ -1,4 +1,7 @@
-window.MasterVolume = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+
+var MasterVolume = React.createClass({
   handleChange: function(e) {
       this.props.updateVolumeLevel(e.target.value);
   },
@@ -11,3 +14,5 @@ window.MasterVolume = React.createClass({
     </div>;
   }
 });
+
+export default MasterVolume;

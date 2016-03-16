@@ -1,4 +1,9 @@
-window.WaveFormCtrl = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+import Distortion from './distortion'
+import MasterVolume from './masterVolume'
+
+var WaveFormCtrl = React.createClass({
 
   handleChange: function(e) {
     this.props.updateWaveForm(e.target.value);
@@ -35,3 +40,5 @@ window.WaveFormCtrl = React.createClass({
     </div>;
   }
 });
+
+export default WaveFormCtrl;

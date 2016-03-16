@@ -1,4 +1,7 @@
-window.VisualisationCtrl = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+
+var VisualisationCtrl = React.createClass({
 
   handleChange: function(e) {
     this.props.toggleViz(e.target.value);
@@ -18,3 +21,5 @@ window.VisualisationCtrl = React.createClass({
     </div>
   }
 });
+
+export default VisualisationCtrl;

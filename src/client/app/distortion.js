@@ -1,4 +1,7 @@
-window.Distortion = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+
+var Distortion = React.createClass({
 
   handleChange: function(e) {
     this.props.updateDistortionValue(e.target.value);
@@ -22,3 +25,5 @@ window.Distortion = React.createClass({
     </div>;
   }
 });
+
+export default Distortion;

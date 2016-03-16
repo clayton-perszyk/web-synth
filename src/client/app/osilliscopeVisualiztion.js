@@ -1,4 +1,8 @@
-window.OsilliscopeVisualiztion = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+import VisualisationCtrl from './visualisationCtrl'
+
+var OsilliscopeVisualiztion = React.createClass({
 
     componentDidMount: function() {
       this.canvas = document.getElementById('canvas');
@@ -55,3 +59,5 @@ window.OsilliscopeVisualiztion = React.createClass({
       </div>;
     }
 });
+
+export default OsilliscopeVisualiztion;

@@ -1,4 +1,7 @@
-window.Keyboard = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+
+var Keyboard = React.createClass({
   handleMouseDown: function(e) {
     this.props.processMessage(144, e.target.id, 1);
   },
@@ -65,3 +68,5 @@ window.Keyboard = React.createClass({
     </div>;
   }
 });
+
+export default Keyboard;

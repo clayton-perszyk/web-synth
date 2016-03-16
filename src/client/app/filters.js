@@ -1,4 +1,7 @@
-window.Filters = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+
+var Filters = React.createClass({
 
   handleChange: function(e) {
     this.props.updateFilter(e.target.name, e.target.value);
@@ -57,3 +60,5 @@ window.Filters = React.createClass({
      </div>;
   }
 });
+
+export default Filters;

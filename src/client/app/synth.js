@@ -1,3 +1,13 @@
+import React from 'react';
+import {render} from 'react-dom';
+import OsilliscopeVisualiztion from './osilliscopeVisualiztion';
+import EnvelopeGenerator from './envelopeGenerator'
+import Filters from './filters'
+import FreqBarVisualisation from './freqBarVisualisation'
+import Keyboard from './keyboard'
+import WaveFormCtrl from './waveFormCtrl'
+
+
 function makeDistortionCurve(distortionLevel) {
    var k = typeof distortionLevel === 'number' ? distortionLevel : 50,
    n_samples = 44100,
@@ -280,7 +290,7 @@ var Synth = React.createClass({
 
 
     return <div id="synth">
-        <div id="logo"><img src="images/midi_synth_opti_gray.png"></img></div>
+        <div id="logo"><img src="../../../images/midi_synth_opti_gray.png"></img></div>
         <div id="controls">
           <EnvelopeGenerator
               attack={this.state.attack}
@@ -315,7 +325,7 @@ var Synth = React.createClass({
 });
 
 
-ReactDOM.render(
+render(
   <Synth />,
   document.getElementById('container')
 );

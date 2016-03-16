@@ -1,4 +1,8 @@
-window.FreqBarVisualisation = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+import VisualisationCtrl from './visualisationCtrl';
+
+var FreqBarVisualisation = React.createClass({
 
   componentDidMount: function() {
     this.canvas = document.getElementById('canvas');
@@ -39,3 +43,5 @@ window.FreqBarVisualisation = React.createClass({
     </div>;
   }
 });
+
+export default FreqBarVisualisation;

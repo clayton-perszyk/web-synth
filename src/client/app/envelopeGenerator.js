@@ -1,4 +1,8 @@
-window.EnvelopeGenerator = React.createClass({
+import React from 'react';
+import {render} from 'react-dom';
+import EnvelopeModes from './envelopeModes'
+
+var EnvelopeGenerator = React.createClass({
 
   handleChange: function(e) {
     this.props.updateEnvelopeValues(e.target.name, e.target.value);
@@ -33,3 +37,5 @@ window.EnvelopeGenerator = React.createClass({
     </div>;
   }
 });
+
+export default EnvelopeGenerator;
