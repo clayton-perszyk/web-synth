@@ -263,7 +263,7 @@ var Synth = React.createClass({
     if (distortion === 'on') {
       this.distortion.curve = makeDistortionCurve(200);
     } else {
-      this.distortion.curve = false;
+      this.distortion.curve = makeDistortionCurve(0);
     }
   },
 
@@ -292,6 +292,7 @@ var Synth = React.createClass({
     return <div id="synth">
         <div id="logo"><img src="../../../images/midi_synth_opti_gray.png"></img></div>
         <div id="controls">
+        <div>nqwfknkwlqnf</div>
           <EnvelopeGenerator
               attack={this.state.attack}
               decay={this.state.decay}

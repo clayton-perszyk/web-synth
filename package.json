@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "deploy": "surge . --domain midi-synth.surge.sh",
-    "webpack": "./node_modules/.bin/webpack -d"
+    "webpack": "webpack --progress --colors --watch"
   },
   "repository": {
     "type": "git",
