@@ -391,11 +391,6 @@
 	      _react2.default.createElement(
 	        'div',
 	        { id: 'controls' },
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          'nqwfknkwlqnf'
-	        ),
 	        _react2.default.createElement(_envelopeGenerator2.default, {
 	          attack: this.state.attack,
 	          decay: this.state.decay,
@@ -423,7 +418,8 @@
 	        null,
 	        _react2.default.createElement(_keyboard2.default, {
 	          notes: this.state.notes,
-	          processMessage: this.processMessage
+	          processMessage: this.processMessage,
+	          offNote: this.offNote
 	        })
 	      )
 	    );
@@ -20562,6 +20558,10 @@
 	    this.props.processMessage(128, e.target.id, 1);
 	  },
 
+	  handleMouseOut: function handleMouseOut(e) {
+	    this.props.offNote(e.target.id, 1);
+	  },
+
 	  render: function render() {
 	    var keys = [{ note: 48, className: 'white' }, { note: 49, className: 'black' }, { note: 50, className: 'white' }, { note: 51, className: 'black' }, { note: 52, className: 'white more' }, { note: 53, className: 'white' }, { note: 54, className: 'black' }, { note: 55, className: 'white' }, { note: 56, className: 'black' }, { note: 57, className: 'white' }, { note: 58, className: 'black' }, { note: 59, className: 'white more' }, { note: 60, className: 'white' }, { note: 61, className: 'black' }, { note: 62, className: 'white' }, { note: 63, className: 'black' }, { note: 64, className: 'white more' }, { note: 65, className: 'white' }, { note: 66, className: 'black' }, { note: 67, className: 'white' }, { note: 68, className: 'black' }, { note: 69, className: 'white' }, { note: 70, className: 'black' }, { note: 71, className: 'white more' }, { note: 72, className: 'white' }, { note: 73, className: 'black' }, { note: 74, className: 'white' }, { note: 75, className: 'black' }, { note: 76, className: 'white more' }, { note: 77, className: 'white' }, { note: 78, className: 'black' }, { note: 79, className: 'white' }, { note: 80, className: 'black' }, { note: 81, className: 'white' }, { note: 82, className: 'black' }, { note: 83, className: 'white more' }, { note: 84, className: 'white last' }];
 
@@ -20579,7 +20579,8 @@
 	      'div',
 	      { id: 'keys',
 	        onMouseDown: this.handleMouseDown,
-	        onMouseUp: this.handleMouseUp },
+	        onMouseUp: this.handleMouseUp,
+	        onMouseOut: this.handleMouseUp },
 	      keyElms
 	    );
 	  }

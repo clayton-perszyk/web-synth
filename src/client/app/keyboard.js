@@ -10,6 +10,10 @@ var Keyboard = React.createClass({
     this.props.processMessage(128, e.target.id, 1);
   },
 
+  handleMouseOut: function(e) {
+    this.props.offNote(e.target.id, 1);
+  },
+
   render: function() {
     var keys = [
       {note: 48, className: 'white'},
@@ -63,7 +67,8 @@ var Keyboard = React.createClass({
 
     return <div id="keys"
                 onMouseDown={this.handleMouseDown}
-                onMouseUp={this.handleMouseUp} >
+                onMouseUp={this.handleMouseUp}
+                onMouseOut={this.handleMouseUp}>
       {keyElms}
     </div>;
   }
