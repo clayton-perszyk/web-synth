@@ -11,7 +11,7 @@ var Filters = React.createClass({
 
       return <div id="filters">
           <form id="filter-one" onChange={this.handleChange}>
-          <h3>Filter 1</h3>
+          <h3>Filter One</h3>
           <div className="filter-ctrl">
           <label> High-Pass
            <input  className='high-pass filter-input' type='radio' name='filter-one' value='highpass' defaultChecked />
@@ -35,7 +35,7 @@ var Filters = React.createClass({
         </form>
 
         <form id="filter-two" onChange={this.handleChange}>
-          <h3>Filter 2</h3>
+          <h3>Filter Two</h3>
           <div className="filter-ctrl">
            <label> High-Pass
             <input className='high-pass' type='radio' name='filter-two' value='highpass' defaultChecked />

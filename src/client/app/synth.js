@@ -56,7 +56,6 @@ var Synth = React.createClass({
   },
 
   componentDidMount: function() {
-
     if (navigator.requestMIDIAccess) {
       navigator.requestMIDIAccess({
         sysex: false

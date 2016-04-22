@@ -22,10 +22,10 @@ var OsilliscopeVisualiztion = React.createClass({
       data = new Uint8Array(length);
       this.props.analyser.getByteTimeDomainData(data);
       this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.canvasContext.fillStyle = 'black'
+      this.canvasContext.fillStyle = '#222';
       this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
       this.canvasContext.lineWidth = 2;
-      this.canvasContext.strokeStyle = '#00FF66';
+      this.canvasContext.strokeStyle = '#00e3f8';
       this.canvasContext.beginPath();
       width = canvas.width * 1.0 / length;
       x = 0;

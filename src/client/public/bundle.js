@@ -128,7 +128,6 @@
 	  },
 
 	  componentDidMount: function componentDidMount() {
-
 	    if (navigator.requestMIDIAccess) {
 	      navigator.requestMIDIAccess({
 	        sysex: false
@@ -20072,10 +20071,10 @@
 	    data = new Uint8Array(length);
 	    this.props.analyser.getByteTimeDomainData(data);
 	    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	    this.canvasContext.fillStyle = 'black';
+	    this.canvasContext.fillStyle = '#222';
 	    this.canvasContext.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	    this.canvasContext.lineWidth = 2;
-	    this.canvasContext.strokeStyle = '#00FF66';
+	    this.canvasContext.strokeStyle = '#00e3f8';
 	    this.canvasContext.beginPath();
 	    width = canvas.width * 1.0 / length;
 	    x = 0;
@@ -20361,7 +20360,7 @@
 	        _react2.default.createElement(
 	          'h3',
 	          null,
-	          'Filter 1'
+	          'Filter One'
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -20410,7 +20409,7 @@
 	        _react2.default.createElement(
 	          'h3',
 	          null,
-	          'Filter 2'
+	          'Filter Two'
 	        ),
 	        _react2.default.createElement(
 	          'div',
